@@ -18,7 +18,7 @@ def get_regression_predictions(input_feature, intercept, slope):
     return predicted_output
 
 
-def get_residual_sum_of_squares(input_feature, output, intercept,slope):
+def get_residual_sum_of_squares(input_feature, output, intercept, slope):
     predictions = get_regression_predictions(input_feature, intercept, slope)
     RSS = ((output - predictions)**2).sum()
     return RSS
@@ -50,9 +50,9 @@ dtype_dict = {'bathrooms':float,
               'sqft_lot':int,
               'view':int}
 
-sales = pandas.read_csv("kc_house_data.csv", dtype = dtype_dict)
-test_data = pandas.read_csv("kc_house_test_data.csv", dtype = dtype_dict)
-train_data = pandas.read_csv("kc_house_train_data.csv", dtype = dtype_dict)
+sales = pandas.read_csv("~/PycharmProjects/ml/regression/kc_house_data.csv", dtype=dtype_dict)
+test_data = pandas.read_csv("~/PycharmProjects/ml/regression/kc_house_test_data.csv", dtype=dtype_dict)
+train_data = pandas.read_csv("~/PycharmProjects/ml/regression/kc_house_train_data.csv", dtype=dtype_dict)
 
 intercept, slope = simple_linear_regression(train_data["sqft_living"], train_data["price"])
 sqft_intercept = intercept
