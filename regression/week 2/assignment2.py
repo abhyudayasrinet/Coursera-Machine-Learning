@@ -161,7 +161,6 @@ test_simple_feature_matrix, output = get_numpy_data(test_data, model_features, m
 new_predictions = predict_output(test_simple_feature_matrix, new_weights)
 #QUIZ QUESTION
 print("model 2 predicted price of house 1 : " , new_predictions[0])
-print(output[0])
 
 errors = new_predictions - output
 RSS_2 = np.multiply(errors, errors).sum()
