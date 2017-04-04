@@ -27,12 +27,13 @@ dtype_dict = {'bathrooms':float,
               'sqft_lot':int,
               'view':int}
 
-sales = pandas.read_csv("C:\\Users\\absrin\\PycharmProjects\\ml\\regression\\week 3\\kc_house_data.csv", dtype=dtype_dict)
+sales = pandas.read_csv(r"C:\Users\abhyu\PycharmProjects\Coursera-Machine-Learning\regression\week 3\kc_house_data.csv", dtype=dtype_dict)
+
 sales = sales.sort_values(by=['sqft_living','price'])
 sales_price = sales["price"]
-test_data = pandas.read_csv("C:\\Users\\absrin\\PycharmProjects\\ml\\regression\\week 3\\wk3_kc_house_test_data.csv", dtype=dtype_dict)
-training_data = pandas.read_csv("C:\\Users\\absrin\\PycharmProjects\\ml\\regression\\week 3\\wk3_kc_house_train_data.csv", dtype=dtype_dict)
-validation_data = pandas.read_csv("C:\\Users\\absrin\\PycharmProjects\\ml\\regression\\week 3\\wk3_kc_house_valid_data.csv", dtype=dtype_dict)
+test_data = pandas.read_csv(r"C:\Users\abhyu\PycharmProjects\Coursera-Machine-Learning\regression\week 3\wk3_kc_house_test_data.csv", dtype=dtype_dict)
+training_data = pandas.read_csv(r"C:\Users\abhyu\PycharmProjects\Coursera-Machine-Learning\regression\week 3\wk3_kc_house_train_data.csv", dtype=dtype_dict)
+validation_data = pandas.read_csv(r"C:\Users\abhyu\PycharmProjects\Coursera-Machine-Learning\regression\week 3\wk3_kc_house_valid_data.csv", dtype=dtype_dict)
 
 
 def polynomial_dataframe(feature, degree):
@@ -95,16 +96,25 @@ def polynomial_dataframe(feature, degree):
 # plt.show()
 
 for i in range(1,16):
-    poly_data = polynomial_dataframe(sales["sqft_living"],i)
+    poly_data = polynomial_dataframe(training_data["sqft_living"],i)
     poly_data["intercept"] = pandas.DataFrame([1]*len(poly_data), columns=["intercept"])
     model = LinearRegression()
-    model.fit(poly_data, sales["price"])
-
-    predictions = model.predict(poly_data)
-    RSS = ((predictions - sales["price"])**2).sum()
+    model.fit(poly_data, training_data["price"])
+    valid_data = polynomial_dataframe(validation_data["sqft_living"], i)
+    valid_data["intercept"] = pandas.DataFrame([1]*len(valid_data), columns=["intercept"])
+    # print(valid_data)
+    predictions = model.predict(valid_data)
+    RSS = ((predictions - validation_data["price"])**2).sum()
     print(i, RSS)
-    if(i==6):
-        plt.plot(sales["sqft_living"], sales["price"], '.',poly_data["power_1"], predictions,'-')
-        plt.show()
 
-poly_data = polynomial_dataframe()
+poly_data = polynomial_dataframe(training_data["sqft_living"], 6)
+poly_data["intercept"] = pandas.DataFrame([1]*len(poly_data), columns=["intercept"])
+model = LinearRegression()
+model.fit(poly_data, training_data["price"])
+print(model.coef_)
+test_data_2 = polynomial_dataframe(test_data["sqft_living"], 6)
+test_data_2["intercept"] = pandas.DataFrame([1]*len(test_data_2), columns=["intercept"])
+predictions = model.predict(test_data_2)
+RSS = ((predictions - test_data["price"])**2).sum()
+print(RSS)
+
